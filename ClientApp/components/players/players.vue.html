@@ -1,0 +1,37 @@
+<template>
+    <div>
+        <div class="loading" v-if="loading">
+            Loading...
+        </div>
+        
+
+        <h1>{{player.name}}</h1>ha ha
+        <ul>
+            <li>Townhall Level: {{player.townHallLevel}}</li>
+        </ul>
+        <table v-if="homeTroops" class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Level</th>
+                <th>MaxLevel</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="item in homeTroops">
+                <td>{{ item.name }}</td>
+                <td>{{ item.level }}</td>
+                <td>{{ item.maxLevel }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <!-- <pre>{{homeTroops}}</pre>
+        <pre>{{player.troops}}</pre>
+        <pre>{{player}}</pre> -->
+
+    </div>
+</template>
+
+<script src="./players.ts"></script>

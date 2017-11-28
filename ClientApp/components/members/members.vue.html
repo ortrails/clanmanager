@@ -1,0 +1,34 @@
+<template>
+    <div>
+        <div class="loading" v-if="loading">
+            Loading...
+        </div>
+
+        <h1>Clan Members</h1>
+
+        <table v-if="items.length" class="table">
+            <thead>
+            <tr>
+                <th>Tag</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>ExpLevel</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="item in items">
+                <td>{{ item.tag }}</td>
+                <td><a :href="'../players/' + item.tag.replace(/#/g, '')">{{ item.name }}</a></td>
+                <td>{{ item.role }}</td>
+                <td>{{ item.expLevel }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <p v-else>
+            <div>{{ items.length }}</div>
+        </p>
+    </div>
+</template>
+
+<script src="./members.ts"></script>
