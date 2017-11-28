@@ -52,12 +52,10 @@ namespace clanmanager.Controllers
             return response;
         }
 
-        //[HttpGet("players/{tag}")]
-        //public string Players([FromRoute] string tag)
-        [HttpGet("players")]
-        public string Players()
+        [HttpGet("players/{tag}")]
+        public string Players([FromRoute] string tag)
         {
-            var tag = "2Y008JPR";
+            //var tag = "2Y008JPR";
             var myUri = $"https://api.clashofclans.com/v1/players/%23{tag.TrimStart('#')}";
             string response = null;
             try

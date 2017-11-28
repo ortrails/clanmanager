@@ -5,7 +5,7 @@
         <ul>
             <li>Townhall Level: {{player.townHallLevel}}</li>
         </ul>
-        <table v-if="homeTroops" class="table">
+        <table v-if="player.troops" class="table">
             <thead>
             <tr>
                 <th>Name</th>
@@ -14,7 +14,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="item in homeTroops">
+            <tr v-for="item in player.troops">
                 <td>{{ item.name }}</td>
                 <td>{{ item.level }}</td>
                 <td>{{ item.maxLevel }}</td>

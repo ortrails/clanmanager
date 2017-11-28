@@ -23,15 +23,14 @@ export default class PlayersComponent extends Vue {
     mounted() {
         this.tag = this.$route.params["tag"];
 
-
         fetch('api/ClashOfClans/Players/' + this.tag)
             .then(response => response.json() as Promise<Player>)
             .then(data => {
-                this.player = (data as any);                
-                this.homeTroops = this.player.troops.filter(isHome);
-            })
+                this.player = (data as any);
+                //this.homeTroops = this.player.troops.filter(isHome);
+            });
 
-        
+
     }   
     
 }
