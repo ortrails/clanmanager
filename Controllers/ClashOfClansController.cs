@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Clanmanager.ViewModels;
+using Newtonsoft.Json;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace clanmanager.Controllers
+namespace Clanmanager.Controllers
 {
     [Route("api/[controller]")]
     public class ClashOfClansController : Controller
@@ -30,14 +32,17 @@ namespace clanmanager.Controllers
 
         }
 
+        
+
 
         [HttpGet("members")]
-        public string Members()
+        public List<MemberViewModel> Members()
         {
             string response = null;
             try
             {
                 response = _client.GetStringAsync("https://api.clashofclans.com/v1/clans/%23cug2ppju/members").Result;
+                
             }
             catch
             {
@@ -49,13 +54,44 @@ namespace clanmanager.Controllers
             ////IRestResponse response = client.Execute(request);
             ////var content = response.Content;
 
-            return response;
+            Member member = JsonConvert.DeserializeObject<Member>(response);
+            List<MemberViewModel> vmList = new List<MemberViewModel>();
+
+            foreach (var item in member.items)
+            {
+                vmList.Add(new MemberViewModel()
+                {
+                    Tag = item.tag,
+                    ExpLevel = item.expLevel,
+                    Name = item.name,
+                    Role = item.role,
+                    TroopLevel = GetTroopLevel(item.tag)
+                });
+            }
+
+            return vmList;
+        }
+
+        private int GetTroopLevel(string tag)
+        {
+            var total = 0;
+            tag = tag.TrimStart('#');
+            var myUri = $"https://api.clashofclans.com/v1/players/%23{tag}";
+            try
+            {
+                var response = _client.GetStringAsync(myUri).Result;
+                var player = JsonConvert.DeserializeObject<Player>(response);
+                return player.troops.Sum(troop => troop.level);
+            }
+            catch
+            {
+                return total;
+            }
         }
 
         [HttpGet("players/{tag}")]
-        public string Players([FromRoute] string tag)
+        public Player Players([FromRoute] string tag)
         {
-            //var tag = "2Y008JPR";
             var myUri = $"https://api.clashofclans.com/v1/players/%23{tag.TrimStart('#')}";
             string response = null;
             try
@@ -66,7 +102,8 @@ namespace clanmanager.Controllers
             {
             }
 
-            return response;
+            Player player = JsonConvert.DeserializeObject<Player>(response);
+            return player;
         }
     }
 

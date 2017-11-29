@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Net.Http.Headers;
 
-namespace clanmanager
+namespace Clanmanager
 {
     public class Startup
     {
@@ -23,6 +25,8 @@ namespace clanmanager
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddResponseCaching();
+            services.AddAuthentication();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +45,8 @@ namespace clanmanager
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseResponseCaching();
+            
             app.UseStaticFiles();
 
             app.UseMvc(routes =>

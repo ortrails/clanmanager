@@ -17,6 +17,7 @@ export default class PlayersComponent extends Vue {
     player: Player;
     tag: string;
     homeTroops: Troops[] = [];
+    troopLevel: number = 0;
 
     data() {
         return {
@@ -31,6 +32,11 @@ export default class PlayersComponent extends Vue {
             .then(data => {
                 this.player = data;
                 this.homeTroops = this.player.troops.filter(isHome);
+                for (var i = 0; i < this.homeTroops.length; i++) {
+                    console.log(this.homeTroops[i].name + ':' + this.homeTroops[i].level);
+                    this.troopLevel += this.homeTroops[i].level;
+                }
+                console.log(this.troopLevel);
             });
     }
 }

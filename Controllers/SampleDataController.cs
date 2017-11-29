@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 
-namespace clanmanager.Controllers
+namespace Clanmanager.Controllers
 {
     [Route("api/[controller]")]
     public class SampleDataController : Controller
