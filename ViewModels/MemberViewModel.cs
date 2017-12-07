@@ -20,5 +20,10 @@ namespace Clanmanager.ViewModels
         public string Role { get; set; }
         public int ExpLevel { get; set; }
         public int TroopLevel { get; set; }
+        public int TroopMaxLevel { get; set; }
+        public int SpellLevel { get; set; }
+        public int SpellMaxLevel { get; set; }
+        public int HeroesLevel { get; set; }
+        public int HeroesMaxLevel { get; set; }
     }
 }

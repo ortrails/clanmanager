@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Clanmanager.ViewModels;
 using Newtonsoft.Json;
+using Clanmanager.Models;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,6 +17,11 @@ namespace Clanmanager.Controllers
     public class ClashOfClansController : Controller
     {
         private readonly HttpClient _client;
+        
+        //public const int Lab1 = 2 + 2 + 2 + 2;
+        //public const int Lab2 = Lab1 + 2 + 2 + 2 + 3 + 2;
+        //public const int Lab3 = Lab2 + 1 + 1 + 1 +
+
 
         public ClashOfClansController()
         {
@@ -56,23 +62,38 @@ namespace Clanmanager.Controllers
 
             Member member = JsonConvert.DeserializeObject<Member>(response);
             List<MemberViewModel> vmList = new List<MemberViewModel>();
+            var maxLevels = new MaxLevels();
 
             foreach (var item in member.items)
             {
+                var player = GetPlayer(item.tag);
+
+                var homeTroops = player.Troops.Where(x => x.village == "home").ToList();
+                var homeSpells = player.Spells.Where(x => x.village == "home").ToList();
+                var heroes = player.Heroes.ToList();
+
+                ////var king = player.Heroes.SingleOrDefault(x => x.name == "Barbarian King");
+                ////var queen = player.Heroes.SingleOrDefault(x => x.name == "Archer Queen");
+
                 vmList.Add(new MemberViewModel()
                 {
                     Tag = item.tag,
                     ExpLevel = item.expLevel,
                     Name = item.name,
                     Role = item.role,
-                    TroopLevel = GetTroopLevel(item.tag)
+                    TroopLevel = homeTroops.Sum(troop => troop.level),
+                    TroopMaxLevel = maxLevels.Troops["TOTAL"][player.TownHallLevel],
+                    SpellLevel = homeSpells.Sum(spell => spell.level),
+                    SpellMaxLevel = maxLevels.Spells["TOTAL"][player.TownHallLevel],
+                    HeroesLevel = heroes.Sum(hero => hero.level),
+                    HeroesMaxLevel = maxLevels.Heroes["TOTAL"][player.TownHallLevel]
                 });
             }
 
             return vmList;
         }
 
-        private int GetTroopLevel(string tag)
+        private PlayerViewModel GetPlayer(string tag)
         {
             var total = 0;
             tag = tag.TrimStart('#');
@@ -80,14 +101,31 @@ namespace Clanmanager.Controllers
             try
             {
                 var response = _client.GetStringAsync(myUri).Result;
-                var player = JsonConvert.DeserializeObject<Player>(response);
-                return player.troops.Sum(troop => troop.level);
+                var player = JsonConvert.DeserializeObject<PlayerViewModel>(response);
+                return player;
             }
             catch
             {
-                return total;
+                return null;
             }
         }
+
+        ////private int GetTroopLevel(string tag)
+        ////{
+        ////    var total = 0;
+        ////    tag = tag.TrimStart('#');
+        ////    var myUri = $"https://api.clashofclans.com/v1/players/%23{tag}";
+        ////    try
+        ////    {
+        ////        var response = _client.GetStringAsync(myUri).Result;
+        ////        var player = JsonConvert.DeserializeObject<Player>(response);
+        ////        return player.troops.Sum(troop => troop.level);
+        ////    }
+        ////    catch
+        ////    {
+        ////        return total;
+        ////    }
+        ////}
 
         [HttpGet("players/{tag}")]
         public Player Players([FromRoute] string tag)

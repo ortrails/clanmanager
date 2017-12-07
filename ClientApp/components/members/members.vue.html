@@ -10,7 +10,9 @@
                 <th>Name</th>
                 <th>Role</th>
                 <th>ExpLevel</th>
-                <th>Troop Level</th>
+                <th>Troops</th>
+                <th>Spells</th>
+                <th>Heroes</th>
             </tr>
             </thead>
             <tbody>
@@ -19,7 +21,9 @@
                 <td><a :href="'../players/' + item.tag.replace(/#/g, '')">{{ item.name }}</a></td>
                 <td>{{ item.role }}</td>
                 <td>{{ item.expLevel }}</td>
-                <td>{{ item.troopLevel }}</td>
+                <td>{{ item.troopLevel / item.troopMaxLevel }}</td>
+                <td>{{ item.spellLevel / item.spellMaxLevel }}</td>
+                <td>{{ item.heroesLevel / item.heroesMaxLevel }}</td>
             </tr>
             </tbody>
         </table>

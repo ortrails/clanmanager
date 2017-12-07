@@ -7,6 +7,7 @@ interface MemberViewModel {
     role: string;
     expLevel: number;
     troopLevel: number;
+    maxTroopLevel: number;
 }
 
 @Component
